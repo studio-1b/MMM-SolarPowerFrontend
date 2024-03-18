@@ -3,8 +3,7 @@ Widget which can be configured to read JSON, which you will have to create yours
 
 | 24h View                  | 30d view              | Annual Solar Summary
 :-------------------------:|:-------------------------:|:-------------------------:
-![](https://raw.githubusercontent.com/studio-1b/MMM-SolarPowerFrontend/main/docs/MMM-SolarPowerFrontend.Screenshot%20from%202024-03-18%2002-48-28.png)  |  ![](https://raw.githubusercontent.com/studio-1b/MMM-SolarPowerFrontend/main/docs/MMM-SolarPowerFrontend2.Screenshot%20from%202024-03-18%2002-49-19.png)  |  ![]
-(https://raw.githubusercontent.com/studio-1b/MMM-SolarPowerFrontend/main/docs/MMM-SolarPowerFrontend3.Screenshot%20from%202024-03-18%2002-49-45.png)
+![](https://raw.githubusercontent.com/studio-1b/MMM-SolarPowerFrontend/main/docs/MMM-SolarPowerFrontend.Screenshot%20from%202024-03-18%2002-48-28.png)  |  ![](https://raw.githubusercontent.com/studio-1b/MMM-SolarPowerFrontend/main/docs/MMM-SolarPowerFrontend2.Screenshot%20from%202024-03-18%2002-49-19.png)  |  ![](https://raw.githubusercontent.com/studio-1b/MMM-SolarPowerFrontend/main/docs/MMM-SolarPowerFrontend3.Screenshot%20from%202024-03-18%2002-49-45.png)
  
 This only graphs data.  It is only organized on frontend, to show the data organized for Solar Power Display
 
