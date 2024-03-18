@@ -1,10 +1,10 @@
 {
-  "name": "MMM-GraphImapChaseAlert",
-  "description": "A Widget that shows a 30-day graph of bank balances, sent via Chase alerts, via IMAP",
+  "name": "MMM-SolarPowerFrontend",
+  "description": "A Widget that shows a Solar power, if you can get the data",
   "keywords": [
     "mirror",
     "smart mirror",
-    "mirror bank emailchase  alert"
+    "solar output UI"
   ],
   "version": "0.0.1",
   "dependencies": {

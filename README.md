@@ -1,9 +1,9 @@
 # MMM-SolarPowerFrontend
 Widget which can be configured to read JSON, which you will have to create yourself, to show your solar power output
 
-| Basic View               | 24h View                  | 30d view              | Annual Solar Summary
-:-------------------------:|:-------------------------:|:-------------------------:|:----------------:
-![](https://raw.githubusercontent.com/studio-1b/MMM-GraphImapChaseAlert/main/docs/MMM-GraphImapChaseAlert.Screenshot%20from%202024-02-25%2005-31-32.png)  |  ![](https://raw.githubusercontent.com/studio-1b/MMM-GraphImapChaseAlert/main/docs/MMM-GraphImapChaseAlert.projection%20Screenshot%20from%202024-02-25%2005-33-01.png)
+| 24h View                  | 30d view              | Annual Solar Summary
+:-------------------------:|:-------------------------:|:-------------------------:
+![](https://raw.githubusercontent.com/studio-1b/MMM-SolarPowerFrontend/main/docs/MMM-SolarPowerFrontend.Screenshot%20from%202024-03-18%2002-48-28.png)  |  ![](https://raw.githubusercontent.com/studio-1b/MMM-SolarPowerFrontend/main/docs/MMM-SolarPowerFrontend2.Screenshot%20from%202024-03-18%2002-49-19.png)  |  ![](https://raw.githubusercontent.com/studio-1b/MMM-SolarPowerFrontend/main/docs/MMM-SolarPowerFrontend3.Screenshot%20from%202024-03-18%2002-48-28.png)
 
 This only graphs data.  It is only organized on frontend, to show the data organized for Solar Power Display
 
@@ -35,7 +35,7 @@ Arduino Nano IoT project, to read from Hall current sensors, and voltage divider
 
 ### Step 2: Configure MagicMirror to display module
 
-Add this entry to <MagicMirror root>/config/config.js, as entry in *modules: [* array, somewhere at end.
+Add this entry to <MagicMirror root>/config/config.js, as entry in modules: [] array, somewhere at end.
 
 ```js
     {
