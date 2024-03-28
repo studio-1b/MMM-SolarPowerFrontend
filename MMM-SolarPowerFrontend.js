@@ -514,6 +514,7 @@ Module.register("MMM-SolarPowerFrontend", {
 		return true;
 	},
 	afterDom: function() {
+		const self = this;
 		Chart.pluginService.register({
 			beforeDraw: function(chart) {
 			  if (chart.config.options.elements.center) {
