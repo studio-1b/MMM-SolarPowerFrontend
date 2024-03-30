@@ -13,14 +13,21 @@ This only graphs data.  It is only organized on frontend, to show the data organ
 
 # Options for obtaining data for Power meter
 
-Linux Python script for pulling JSON data from Renogy battery with bluetooth output
-[ https://github.com/studio-1b/]( https://github.com/studio-1b/)
+There are a variety of ways to do this, but as of 2024, none of them are a single click easy.  The two easiest resources below, are how to interface with a bluetooth interface to either a Battery, or Solar Controller.  A battery or solar controller with bluetooth is actually pretty common in 2024, for communicating with Smartphone apps.  There just needs to a hook for whatever platform will generate the data for this solar power display, if you like it.  Below are 2 programs for the python platform, running on Linux (I doubt it will work on Windows, as it doesn't look like there is a generic bluetooth interface for python), and you may need to modify the Python program for your purposes, to generate the data needed,
 
-Linux Python script for pulling JSON data from Victron Solar Controller with bluetooth output
-[ https://github.com/studio-1b/]( https://github.com/studio-1b/)
+External link: Linux Python script for pulling JSON data from Renogy battery with bluetooth output
+[ https://github.com/studio-1b/]( https://github.com/cyrils/renogy-bt)
+
+External link: Linux Python script for pulling JSON data from Victron Solar Controller with bluetooth output
+[ https://github.com/keshavdv/victron-ble]( https://github.com/keshavdv/victron-ble)
+
+
+The link below, is a project inspired by a powermeter project, featured in a Video by GreatScott on youtube. [https://www.youtube.com/watch?v=lrugreN2K4w] (https://www.youtube.com/watch?v=lrugreN2K4w).  I took some liberties, and created a current and voltmeter that will read from two power supply pairs.
 
 Arduino Nano IoT project, to read from Hall current sensors, and voltage dividers to read voltage
-[ https://github.com/studio-1b/]( https://github.com/studio-1b/)
+[ https://github.com/studio-1b/Solar-Power-Meter]( https://github.com/studio-1b/Solar-Power-Meter)
+
+After you obtain the data, it can be uploaded to a URL.  Then change the configuration, to reflect the url location the data was uploaded.
 
 
 # Installation
@@ -46,15 +53,15 @@ Add this entry to <MagicMirror root>/config/config.js, as entry in modules: [] a
             width: 350,
             contentAlign: 'right',
 
-            mode: '24h|30d|1y',
-            power_24h_url: "***<data for 24h>***",
-            power_30d_url: "***<data for 30d>***",
-            power_1yr_url: "***<data for annual averages>***",
+            mode: '24h', // 24h or 30d or 1yr
+            power_24h_url: "***<url, data for 24h>***",
+            power_30d_url: "***<url, data for 30d>***",
+            power_1yr_url: "***<url, data for annual averages>***",
         }
     },
 ```
 
-### Step 3: 
+### Step 3: Make sure the data in the URL above, matches the data expected by this module
 
 data expected in power_24h_url output
 ```js
@@ -189,14 +196,17 @@ data expected in power_1yr_url
 
 ### Step 4: Ensuring data is available
 
-You have to find a way to update the url in  
-   power_24h_url
-   power_30d_url
-   power_1yr_url
-
-and verify in linux using the command
+and verify the URL above in linux using the command
    curl <url>
 or in any webrowser, enter the url
 
-if there, restart magic mirror
+
+In addition to supplying the solar data, you have to find a way to send regular updates to the url.  The module will regularly check the url for changes, but you have to upload changes regularly.
+
+   * power_24h_url
+   * power_30d_url
+   * power_1yr_url
+
+
+If everything is in place, restart magic mirror to include the module on next restart.
 

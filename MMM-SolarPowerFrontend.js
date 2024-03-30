@@ -1408,9 +1408,11 @@ Module.register("MMM-SolarPowerFrontend", {
 			return "";
 		}
 		this.toMidnightString = function(value) {
-			if(!isNaN(Date.parse(value)))
-				return value.split(" ")[0];
-			else
+			const parsed = Date.parse(value);
+			if(!isNaN(parsed)) {
+				var date = new Date(parsed);
+				return date.getMonth()+"/"+date.getDate();
+			} else
 				return "";
 		}
 	},
