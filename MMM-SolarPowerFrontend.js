@@ -201,7 +201,7 @@ Module.register("MMM-SolarPowerFrontend", {
 		//div.append(canvas1);
 
 		const half = "48%"; //(config.width/2) + "px";
-		const horizontalchart = {width:half, aspectRatio: "1 / 1", display:"inline-block",verticalAlign:"top",marginBottom:"10px"};
+		const horizontalchart = {width:half, aspectRatio: "5 / 4", display:"inline-block",verticalAlign:"top",marginBottom:"10px"};
 		var div1 = document.createElement("div"); //<div class="horizontalchart">
 		div1.style.width = horizontalchart.width;
 		//div1.style.height = horizontalchart.height;
@@ -251,7 +251,7 @@ Module.register("MMM-SolarPowerFrontend", {
 		h2.innerHTML="Last 24 hours";
 		div.append(h2);
 
-		var section2 = document.createElement("div");
+		var section2 = this.section2 = document.createElement("div");
 		section2.style.width = config.width;
 		section2.style.backgroundColor = "rgba(64,64,64,0.1)";
 		section2.style.display = "inline-block";
@@ -296,7 +296,7 @@ Module.register("MMM-SolarPowerFrontend", {
 		infobox1.style.width=fuzzyOverlay.width;
 		infobox1.style.backgroundColor=fuzzyOverlay.backgroundColor;
 		infobox1.style.position=fuzzyOverlay.position;
-		infobox1.style.absolute=fuzzyOverlay.display;
+		infobox1.style.display=fuzzyOverlay.display;
 		var tr11 = document.createElement("tr");
 		infobox1.appendChild(tr11);
 		var td11a = document.createElement("td");
@@ -341,6 +341,8 @@ Module.register("MMM-SolarPowerFrontend", {
 		var infobox2 = this.infobox2 = document.createElement("table");
 		infobox2.style.width=fuzzyOverlay.width;
 		infobox2.style.backgroundColor=fuzzyOverlay.backgroundColor;
+		infobox1.style.position=fuzzyOverlay.position;
+		infobox1.style.display=fuzzyOverlay.display;
 		var tr21 = document.createElement("tr");
 		infobox2.appendChild(tr21);
 		var td21a = document.createElement("td");
@@ -403,7 +405,7 @@ Module.register("MMM-SolarPowerFrontend", {
 		//div.append(hr1);
 
 		// 30d charts
-		var h3 = document.createElement("h2");
+		var h3 = this.h3 = document.createElement("h2");
 		h3.style.fontSize = h2style.fontSize;
 		h3.style.color = h2style.color;
 		h3.style.padding = h2style.padding;
@@ -412,7 +414,7 @@ Module.register("MMM-SolarPowerFrontend", {
 		h3.innerHTML="Last 30 days";
 		div.append(h3);
 
-		var section3 = document.createElement("div");
+		var section3 = this.section3 = document.createElement("div");
 		section3.style.width = config.width;
 		section3.style.backgroundColor = "rgba(64,64,64,0.1)";
 		section3.style.display = "inline-block";
@@ -449,6 +451,13 @@ Module.register("MMM-SolarPowerFrontend", {
 		canvas6.style.maxHeight = subchartHeight;
 		this.canvas6 = canvas6;
 		div6.append(canvas6);
+                var progress3 = document.createElement("div");
+		progress3.style.width = "0%";
+		progress3.style.height = "4px";
+		progress3.style.visibility = "hidden";
+		progress3.style.backgroundColor = "white";
+		div7.append(progress3);
+
 
 		if(["24h","30d"].indexOf(this.config.mode)!=-1) {
 			console.log("Stopping display of 30d and annual averages");
@@ -459,7 +468,7 @@ Module.register("MMM-SolarPowerFrontend", {
 		//div.append(hr2);
 
 		// annual solar by monthly hour chart
-		var h4 = document.createElement("h2");
+		var h4 = this.h4 = document.createElement("h2");
 		h4.style.fontSize = h2style.fontSize;
 		h4.style.color = h2style.color;
 		h4.style.padding = h2style.padding;
@@ -468,7 +477,7 @@ Module.register("MMM-SolarPowerFrontend", {
 		h4.innerHTML="Average Solar output by hour and month";
 		div.append(h4);
 		
-		var section4 = document.createElement("div");
+		var section4 = this.section4 = document.createElement("div");
 		section4.style.width = config.width;
 		section4.style.backgroundColor = "rgba(64,64,64,0.1)";
 		section4.style.display = "inline-block";
@@ -489,6 +498,12 @@ Module.register("MMM-SolarPowerFrontend", {
 		canvas7.style.maxHeight = doubleheight;
 		this.canvas7 = canvas7;
 		div7.append(canvas7);
+                var progress4 = document.createElement("div");
+		progress4.style.width = "0%";
+		progress4.style.height = "4px";
+		progress4.style.visibility = "hidden";
+		progress4.style.backgroundColor = "white";
+		div7.append(progress4);
 
 		//console.log("dom returned");
 		
