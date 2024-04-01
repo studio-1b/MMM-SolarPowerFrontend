@@ -29,6 +29,24 @@ Arduino Nano IoT project, to read from Hall current sensors, and voltage divider
 
 After you obtain the data, it can be uploaded to a URL.  Then change the configuration, to reflect the url location the data was uploaded.
 
+## If you need to join json data
+
+If you manage to get the Solar information in different json files, and you need to join them, I wrote a utility to help with that.
+There is folder named Util.  Copy this python script:
+```
+jqoin.py
+```
+
+Give it permission to run
+```
+chmod +x jqoin.py
+```
+
+It is short.  It doesn't do anything evil.  You can look thru it yourself.  It is Python program, adapted to run a shell script.  It will create a database-like join between 2 json files, you just need to tell it, what the join values are
+```
+jqoin.py [folder/list of files1] [field from prev json] [folder/list of files2] [field from list of json]
+```
+
 
 # Installation
 ### Step 1: Git Clone and install dependencies(npm install)

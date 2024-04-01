@@ -1,0 +1,67 @@
+bob@fedora:~/solarjson$ date && ./jqoin.py 'a_json/' filename:6:19 'b_json/' filename:7:20 2>/dev/null |wc -l && date
+Mon Apr  1 04:09:56 AM PDT 2024
+28190
+Mon Apr  1 04:10:33 AM PDT 2024
+bob@fedora:~/solarjson$ date && ./jqoin.py a_json/ .now:0:16 b_json/ .now:0:16 2>/dev/null |wc -l && date
+Mon Apr  1 04:11:13 AM PDT 2024
+27731
+Mon Apr  1 04:11:48 AM PDT 2024
+bob@fedora:~/solarjson$ 
+
+bob@fedora:~/solarjson$ date && ./jqoin.py 'a_json/filejs2403*' filename:6:19 'b_json/jsonfil2403*' filename:7:20 2>/dev/null |wc -l && date
+Mon Apr  1 04:21:58 AM PDT 2024
+4357
+Mon Apr  1 04:22:05 AM PDT 2024
+bob@fedora:~/solarjson$ date && ./jqoin.py 'a_json/filejs2403*' .now:0:16 'b_json/jsonfil2403*' .now:0:16 2>/dev/null | wc -l && date
+Mon Apr  1 04:22:26 AM PDT 2024
+4351
+Mon Apr  1 04:22:34 AM PDT 2024
+
+
+pi@pi16-van:~ $ date && ./jqoin.py '/var/www/html/a_json/filejs2403*' filen
+ame:6:19 '/var/www/html/b_json/jsonfil2403*' filename:7:20 2>/dev/null |wc
+ -l && date
+Mon 01 Apr 2024 04:33:52 AM PDT
+4409
+Mon 01 Apr 2024 04:35:07 AM PDT
+pi@pi16-van:~ $ date && ./jqoin.py '/var/www/html/a_json/filejs2403*' .now:
+0:16 '/var/www/html/b_json/jsonfil2403*' .now:0:16 2>/dev/null | wc -l &&
+date
+Mon 01 Apr 2024 04:36:12 AM PDT
+4403
+Mon 01 Apr 2024 04:37:09 AM PDT
+pi@pi16-van:~ $
+
+pi@pi16-van:~ $ date && ./jqoin.py '/var/www/html/a_json/filejs240331*' fil
+ename:6:19 '/var/www/html/b_json/jsonfil240331*' filename:7:20 2>/dev/null
+ |wc -l && date
+Mon 01 Apr 2024 04:40:07 AM PDT
+143
+Mon 01 Apr 2024 04:40:24 AM PDT
+pi@pi16-van:~ $ date && ./jqoin.py '/var/www/html/a_json/filejs240401*' fil
+ename:6:19 '/var/www/html/b_json/jsonfil240401*' filename:7:20 2>/dev/null
+ |wc -l && date
+Mon 01 Apr 2024 04:40:54 AM PDT
+29
+Mon 01 Apr 2024 04:40:59 AM PDT
+pi@pi16-van:~ $
+
+
+
+pi@pi16-van:~/adapt_jsonfilfilejs2vanbatteryhtml $ date && /home/pi/adapt_victro
+nfilejs2vanbatteryhtml/jsonfilfilejs2powerarduino.sh intervalaverages>/dev/null && date
+Mon 01 Apr 2024 04:44:15 AM PDT
+Mon 01 Apr 2024 04:45:34 AM PDT
+
+
+
+pi@pi16-van:~ $ date && ./jqoin.py '/var/www/html/a_json/filejs2403*00??.json' filename:6:19 '/var/www/html/b_json/jsonfil2403*00??.json' filename:7:
+20 2>/dev/null |wc -l && date
+Mon 01 Apr 2024 04:56:41 AM PDT
+729
+Mon 01 Apr 2024 04:56:52 AM PDT
+pi@pi16-van:~ $ date && ./jqoin.py '/var/www/html/a_json/filejs2403*' filename:6:19 '/var/www/html/b_json/jsonfil2403*' filename:7:20 2>/dev/null |wc -l && date
+Mon 01 Apr 2024 04:57:04 AM PDT
+4409
+Mon 01 Apr 2024 04:57:59 AM PDT
+pi@pi16-van:~ $

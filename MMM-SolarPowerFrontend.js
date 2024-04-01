@@ -201,7 +201,7 @@ Module.register("MMM-SolarPowerFrontend", {
 		//div.append(canvas1);
 
 		const half = "48%"; //(config.width/2) + "px";
-		const horizontalchart = {width:half, aspectRatio: "5 / 4", display:"inline-block",verticalAlign:"top",marginBottom:"10px"};
+		const horizontalchart = {width:half, aspectRatio: "1 / 1", display:"inline-block",verticalAlign:"top",marginBottom:"10px"};
 		var div1 = document.createElement("div"); //<div class="horizontalchart">
 		div1.style.width = horizontalchart.width;
 		//div1.style.height = horizontalchart.height;
