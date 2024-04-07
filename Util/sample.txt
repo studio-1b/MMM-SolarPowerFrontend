@@ -1,3 +1,5 @@
+Test run of the join (between file name substring, vs object value substring)
+=============================================================================
 bob@fedora:~/solarjson$ date && ./jqoin.py 'a_json/' filename:6:19 'b_json/' filename:7:20 2>/dev/null |wc -l && date
 Mon Apr  1 04:09:56 AM PDT 2024
 28190
@@ -8,6 +10,11 @@ Mon Apr  1 04:11:13 AM PDT 2024
 Mon Apr  1 04:11:48 AM PDT 2024
 bob@fedora:~/solarjson$ 
 
+It isn't the same join count b/c the .now field doesn't always exist.  
+But it took 35sec for both, for 28k records.  Slow as shit, but it works.
+
+Test run of the join for march data (between file name substring, vs object value substring)
+===================================
 bob@fedora:~/solarjson$ date && ./jqoin.py 'a_json/filejs2403*' filename:6:19 'b_json/jsonfil2403*' filename:7:20 2>/dev/null |wc -l && date
 Mon Apr  1 04:21:58 AM PDT 2024
 4357
@@ -17,7 +24,11 @@ Mon Apr  1 04:22:26 AM PDT 2024
 4351
 Mon Apr  1 04:22:34 AM PDT 2024
 
+4k records in 7sec.  It is fast for the .now join, b/c the search parameters are limited by the indexed filename
 
+
+1 mo search is more clearly slow run on raspberry pi
+====================================================
 pi@pi16-van:~ $ date && ./jqoin.py '/var/www/html/a_json/filejs2403*' filen
 ame:6:19 '/var/www/html/b_json/jsonfil2403*' filename:7:20 2>/dev/null |wc
  -l && date
@@ -32,36 +43,69 @@ Mon 01 Apr 2024 04:36:12 AM PDT
 Mon 01 Apr 2024 04:37:09 AM PDT
 pi@pi16-van:~ $
 
-pi@pi16-van:~ $ date && ./jqoin.py '/var/www/html/a_json/filejs240331*' fil
-ename:6:19 '/var/www/html/b_json/jsonfil240331*' filename:7:20 2>/dev/null
- |wc -l && date
-Mon 01 Apr 2024 04:40:07 AM PDT
-143
-Mon 01 Apr 2024 04:40:24 AM PDT
-pi@pi16-van:~ $ date && ./jqoin.py '/var/www/html/a_json/filejs240401*' fil
-ename:6:19 '/var/www/html/b_json/jsonfil240401*' filename:7:20 2>/dev/null
- |wc -l && date
-Mon 01 Apr 2024 04:40:54 AM PDT
-29
-Mon 01 Apr 2024 04:40:59 AM PDT
-pi@pi16-van:~ $
 
 
-
-pi@pi16-van:~/adapt_jsonfilfilejs2vanbatteryhtml $ date && /home/pi/adapt_victro
-nfilejs2vanbatteryhtml/jsonfilfilejs2powerarduino.sh intervalaverages>/dev/null && date
-Mon 01 Apr 2024 04:44:15 AM PDT
-Mon 01 Apr 2024 04:45:34 AM PDT
-
-
-
+How to join data, that was taken on the hour
+============================================
 pi@pi16-van:~ $ date && ./jqoin.py '/var/www/html/a_json/filejs2403*00??.json' filename:6:19 '/var/www/html/b_json/jsonfil2403*00??.json' filename:7:
 20 2>/dev/null |wc -l && date
 Mon 01 Apr 2024 04:56:41 AM PDT
 729
 Mon 01 Apr 2024 04:56:52 AM PDT
+
 pi@pi16-van:~ $ date && ./jqoin.py '/var/www/html/a_json/filejs2403*' filename:6:19 '/var/www/html/b_json/jsonfil2403*' filename:7:20 2>/dev/null |wc -l && date
 Mon 01 Apr 2024 04:57:04 AM PDT
 4409
 Mon 01 Apr 2024 04:57:59 AM PDT
 pi@pi16-van:~ $
+
+
+jqoin Can we used with jq
+using jq in Linux, to shape JSON, ie.
+https://qmacro.org/blog/posts/2022/06/16/summing-and-grouping-values-with-jq/
+https://gist.github.com/ipbastola/2c955d8bf2e96f9b1077b15f995bdae3
+https://ioflood.com/blog/jq-sort/
+https://exercism.org/tracks/jq/concepts/conditionals
+
+path1
+file1200: {now:"2024/03/01 12:00:00", remaining:90}
+file1300: {now:"2024/03/01 13:00:00", remaining:100}
+
+path2
+jsonfile1200: {now:"2024/03/01 12:00:00", battery_charging_current:3.4, yield_today:120}
+jsonfile1300: {now:"2024/03/01 13:00:00", battery_charging_current:0.4, yield_today:140}
+
+
+jqoin.py 'path1/' filename:3:7 'path2/' filename:7:11 
+| jq 'select(.remaining<99)'
+| jq -s '.|group_by(.a.json.now[5:7],.a.json.now[11:13]) 
+          | map([first.a.now,
+                 first.a.now[5:7],
+                 first.a.now[11:13],
+                 (map(.b.battery_charging_current)| add/length),
+                 (map(.b.yield_today)| add/length)]) 
+          | group_by(.[1]) 
+          | map({"mm":first[1],
+                  data:(.|sort_by(.[2])|map(.[3])),
+                  complete:(.|sort_by(.[2])|map(.[2])),
+                  "wh":(.|map(.[4])|max),
+                  "ah":(.|map(.[3])|add) })'
+
+| jq '[ 
+((.[]|select(.mm=="01"))//({ "mm": "01", "data": [null,null,null,null,null,null,null,null,null,null,null,null] })),
+((.[]|select(.mm=="02"))//({ "mm": "02", "data": [null,null,null,null,null,null,null,null,null,null,null,null] })),
+((.[]|select(.mm=="03"))//({ "mm": "03", "data": [null,null,null,null,null,null,null,null,null,null,null,null] })),
+((.[]|select(.mm=="04"))//({ "mm": "04", "data": [null,null,null,null,null,null,null,null,null,null,null,null] })),
+((.[]|select(.mm=="05"))//({ "mm": "05", "data": [null,null,null,null,null,null,null,null,null,null,null,null] })),
+((.[]|select(.mm=="06"))//({ "mm": "06", "data": [null,null,null,null,null,null,null,null,null,null,null,null] })),
+((.[]|select(.mm=="07"))//({ "mm": "07", "data": [null,null,null,null,null,null,null,null,null,null,null,null] })),
+((.[]|select(.mm=="08"))//({ "mm": "08", "data": [null,null,null,null,null,null,null,null,null,null,null,null] })),
+((.[]|select(.mm=="09"))//({ "mm": "09", "data": [null,null,null,null,null,null,null,null,null,null,null,null] })),
+((.[]|select(.mm=="10"))//({ "mm": "10", "data": [null,null,null,null,null,null,null,null,null,null,null,null] })),
+((.[]|select(.mm=="11"))//({ "mm": "11", "data": [null,null,null,null,null,null,null,null,null,null,null,null] })),
+((.[]|select(.mm=="12"))//({ "mm": "12", "data": [null,null,null,null,null,null,null,null,null,null,null,null] }))
+]' 
+
+<Finished!>
+
+This might help in creating a job to create json, for the Solar meter
