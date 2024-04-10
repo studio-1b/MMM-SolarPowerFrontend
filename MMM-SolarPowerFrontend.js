@@ -291,15 +291,19 @@ Module.register("MMM-SolarPowerFrontend", {
 		div4.append(canvas4);
 
 		//info boxes for 24h
-		const fuzzyOverlay = {width:"175px", backgroundColor:"rgba(0,0,0, 0.5)", position:"absolute", display:"none"};
+		const fuzzyOverlay = {width:"175px", backgroundColor:"rgba(0,0,0, 0.5)", position:"absolute", display:"none", font:"10pt Roboto"};
 		var infobox1 = this.infobox1 = document.createElement("table");
+                section2.append(infobox1);
 		infobox1.style.width=fuzzyOverlay.width;
 		infobox1.style.backgroundColor=fuzzyOverlay.backgroundColor;
 		infobox1.style.position=fuzzyOverlay.position;
 		infobox1.style.display=fuzzyOverlay.display;
+		infobox1.style.font=fuzzyOverlay.font;
 		var tr11 = document.createElement("tr");
 		infobox1.appendChild(tr11);
 		var td11a = document.createElement("td");
+                td11a.style.textDecoration = "underline";
+                td11a.style.fontWeight = "bold";
 		tr11.appendChild(td11a).append("Battery Amps");
 		//var td11b = document.createElement("td");
 		//tr11.appendChild(td11b);
@@ -310,7 +314,7 @@ Module.register("MMM-SolarPowerFrontend", {
 		var tr12 = document.createElement("tr");
 		infobox1.appendChild(tr12);
 		var td12a = document.createElement("td");
-		tr12.appendChild(td12a).append("&Delta; mA 24h:");
+		tr12.appendChild(td12a).append("\u0394 mA 24h:") //("&Delta; mA 24h:");
 		var td12b = document.createElement("td");
 		tr12.appendChild(td12b);
 		var span12 = this.ma24 = document.createElement("span");
@@ -327,25 +331,30 @@ Module.register("MMM-SolarPowerFrontend", {
 		td13b.appendChild(span13).id = "mah24";
 		td13b.append("mA");
 
-		var tr14 = document.createElement("tr");
-		infobox1.appendChild(tr14);
-		var td14a = document.createElement("td");
-		tr14.appendChild(td14a).append("Daily Ah (avg mA*24):");
-		var td14b = document.createElement("td");
-		tr14.appendChild(td14b);
-		var span14 = this.mahdaily = document.createElement("span");
-		td14b.appendChild(span14).id = "mahdaily";
-		td14b.append("mAh");
+//		var tr14 = document.createElement("tr");
+//		infobox1.appendChild(tr14);
+//		var td14a = document.createElement("td");
+//		tr14.appendChild(td14a).append("Daily Ah (avg mA*24):");
+//		var td14b = document.createElement("td");
+//		tr14.appendChild(td14b);
+//		var span14 = this.mahdaily = document.createElement("span");
+//		td14b.appendChild(span14).id = "mahdaily";
+//		td14b.append("mAh");
 
 
 		var infobox2 = this.infobox2 = document.createElement("table");
+                section2.append(infobox2);
 		infobox2.style.width=fuzzyOverlay.width;
 		infobox2.style.backgroundColor=fuzzyOverlay.backgroundColor;
-		infobox1.style.position=fuzzyOverlay.position;
-		infobox1.style.display=fuzzyOverlay.display;
+		infobox2.style.position=fuzzyOverlay.position;
+		infobox2.style.display=fuzzyOverlay.display;
+		infobox2.style.font=fuzzyOverlay.font;
 		var tr21 = document.createElement("tr");
 		infobox2.appendChild(tr21);
 		var td21a = document.createElement("td");
+                td21a.style.textDecoration = "underline";
+                td21a.style.fontWeight = "bold";
+                td21a.noWrap = true;
 		tr21.appendChild(td21a).append("Circuit Volts");
 		//var td11b = document.createElement("td");
 		//tr11.appendChild(td11b);
@@ -353,20 +362,21 @@ Module.register("MMM-SolarPowerFrontend", {
 		//td11b.appendChild(span11);
 		//td11b.append();
 
-		var tr22 = document.createElement("tr");
-		infobox2.appendChild(tr22);
-		var td22a = document.createElement("td");
-		tr22.appendChild(td22a).append("Voltage yesterday:");
-		var td22b = document.createElement("td");
-		tr22.appendChild(td22b);
-		var span22 = this.mv24 = document.createElement("span");
-		td22b.appendChild(span22).id = "mv24";
-		td22b.append("mV");
+//		var tr22 = document.createElement("tr");
+//		infobox2.appendChild(tr22);
+//		var td22a = document.createElement("td");
+//                td22a.noWrap = true;
+//		tr22.appendChild(td22a).append("Voltage yesterday:");
+//		var td22b = document.createElement("td");
+//		tr22.appendChild(td22b);
+//		var span22 = this.mv24 = document.createElement("span");
+//		td22b.appendChild(span22).id = "mv24";
+//		td22b.append("mV");
 
 		var tr23 = document.createElement("tr");
 		infobox2.appendChild(tr23);
 		var td23a = document.createElement("td");
-		tr23.appendChild(td23a).append("&Delta; mV 24h:");
+		tr23.appendChild(td23a).append("\u0394 mV 24h:"); //("&Delta; mV 24h:");
 		var td23b = document.createElement("td");
 		tr23.appendChild(td23b);
 		var span23 = this.dmv24 = document.createElement("span");
@@ -376,8 +386,10 @@ Module.register("MMM-SolarPowerFrontend", {
 		var tr24 = document.createElement("tr");
 		infobox2.appendChild(tr24);
 		var td24a = document.createElement("td");
+                td24a.noWrap = true;
 		tr24.appendChild(td24a).append("Daily range:");
 		var td24b = document.createElement("td");
+                td24b.noWrap = true;
 		tr24.appendChild(td24b);
 		var span24 = this.mvlow = document.createElement("span");
 		td24b.appendChild(span24).id = "mvlow";
@@ -389,7 +401,8 @@ Module.register("MMM-SolarPowerFrontend", {
 		var tr25 = document.createElement("tr");
 		infobox2.appendChild(tr25);
 		var td25a = document.createElement("td");
-		tr25.appendChild(td25a).append("&Delta; mAh 24h:");
+                td25a.noWrap = true;
+		tr25.appendChild(td25a).append("\u0394 mAh 24h:"); //("&Delta; mAh 24h:");
 		var td25b = document.createElement("td");
 		tr25.appendChild(td25b);
 		var span25 = this.dmah24 = document.createElement("span");
@@ -456,7 +469,7 @@ Module.register("MMM-SolarPowerFrontend", {
 		progress3.style.height = "4px";
 		progress3.style.visibility = "hidden";
 		progress3.style.backgroundColor = "white";
-		div7.append(progress3);
+		div6.append(progress3);
 
 
 		if(["24h","30d"].indexOf(this.config.mode)!=-1) {
@@ -1174,9 +1187,11 @@ Module.register("MMM-SolarPowerFrontend", {
 		this.mah24.innerHTML = totalmah;
 		this.ma24.innerHTML = Math.round(last.battery_ma - first.battery_ma);
 		this.dmv24.innerHTML = Math.round(last.system_mv - first.system_mv);
-		this.mv24.innerHTML = Math.round(first.system_mv) ;
+//		this.mv24.innerHTML = Math.round(first.system_mv) ;
 		this.dmah24.innerHTML = Math.round(last.est_available_mah - first.est_available_mah);
-		this.infobox2.style.top = first.est_available_mah>50000 ? 630 : 530;
+		this.infobox1.style.top = "275px";
+		this.infobox2.style.left = "100px";
+		this.infobox2.style.top = first.est_available_mah>50000 ? "530px" : "430px";
 		var vmax = 0;
 		var vmin = 50000;
 		for(var i=1; i<json.length-1; i++) {
@@ -1291,7 +1306,9 @@ Module.register("MMM-SolarPowerFrontend", {
 		chart7.update();
 		
 		//document.getElementById("mahdaily").innerHTML = Math.round(json.reduce((o,n)=>o==null ? n : n==null ? o : o+n.mah_total) / json.reduce((o,n)=> o==null ? n : n==null ? o : o+n.sample_count));
-		this.mahdaily.innerHTML = Math.round(json.reduce((o,n)=>o==null ? n : n==null ? o : o+n.mah_total) / json.reduce((o,n)=> o==null ? n : n==null ? o : o+n.sample_count));
+//console.log("mahdaily");
+//console.log(json);
+//		this.mahdaily.innerHTML = Math.round(json.reduce((o,n)=>o==null ? n : n==null ? o : o+n.mah_total) / json.reduce((o,n)=> o==null ? n : n==null ? o : o+n.sample_count));
 	},
 
 

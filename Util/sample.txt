@@ -43,6 +43,18 @@ Mon 01 Apr 2024 04:36:12 AM PDT
 Mon 01 Apr 2024 04:37:09 AM PDT
 pi@pi16-van:~ $
 
+You can clearly see the difference, between setting up the join differently, filtering before and after a join
+===========================================================================
+pi@pi16-van:/var/www/html $ date && jqoin.py renogy_json/ filename:6:19 victron_json/ filename:7:20 | jq -c 'select(.a.json.now[0:10]=="2024/03/31")' | wc -l && date
+Sun 07 Apr 2024 01:58:28 AM PDT
+143
+Sun 07 Apr 2024 02:21:38 AM PDT
+
+pi@pi16-van:/var/www/html $ date && jqoin.py 'renogy_json/renogy240331*' filename:6:19 'victron_json/victron240331*' filename:7:20 | jq -c . | wc -l && date
+Sun 07 Apr 2024 03:10:58 AM PDT
+143
+Sun 07 Apr 2024 03:11:18 AM PDT
+
 
 
 How to join data, that was taken on the hour
