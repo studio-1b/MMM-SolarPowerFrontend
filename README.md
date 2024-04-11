@@ -16,7 +16,7 @@ This only graphs data.  It is only organized on frontend, to show the data organ
 There are a variety of ways to do this, but as of 2024, none of them are a single click easy.  The two easiest resources below, are how to interface with a bluetooth interface to either a Battery, or Solar Controller.  A battery or solar controller with bluetooth is actually pretty common in 2024, for communicating with Smartphone apps.  There just needs to a hook for whatever platform will generate the data for this solar power display, if you like it.  Below are 2 programs for the python platform, running on Linux (I doubt it will work on Windows, as it doesn't look like there is a generic bluetooth interface for python), and you may need to modify the Python program for your purposes, to generate the data needed,
 
 External link: Linux Python script for pulling JSON data from Renogy battery with bluetooth output
-[ https://github.com/studio-1b/]( https://github.com/cyrils/renogy-bt)
+[ https://github.com/cyrils/renogy-bt]( https://github.com/cyrils/renogy-bt)
 
 External link: Linux Python script for pulling JSON data from Victron Solar Controller with bluetooth output
 [ https://github.com/keshavdv/victron-ble]( https://github.com/keshavdv/victron-ble)
