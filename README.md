@@ -22,7 +22,7 @@ External link: Linux Python script for pulling JSON data from Victron Solar Cont
 [ https://github.com/keshavdv/victron-ble]( https://github.com/keshavdv/victron-ble)
 
 
-The link below, is a project inspired by a powermeter project, featured in a Video by GreatScott on youtube. [https://www.youtube.com/watch?v=lrugreN2K4w] (https://www.youtube.com/watch?v=lrugreN2K4w).  I took some liberties, and created a current and voltmeter that will read from two power supply pairs.
+The link below, is a project inspired by a powermeter project, featured in a Video by GreatScott on youtube. [https://www.youtube.com/watch?v=lrugreN2K4w](https://www.youtube.com/watch?v=lrugreN2K4w).  I took some liberties, and created a current and voltmeter that will read from two power supply pairs.
 
 Arduino Nano IoT project, to read from Hall current sensors, and voltage dividers to read voltage
 [ https://github.com/studio-1b/Solar-Power-Meter]( https://github.com/studio-1b/Solar-Power-Meter)
