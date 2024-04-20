@@ -2,9 +2,11 @@
 
 import sys
 import os
+from os import isatty
 import glob
 from datetime import datetime
-from itertools import chain
+#from itertools import chain
+import string
 
 # Python program to read
 # json file
@@ -64,6 +66,65 @@ def get_json(filename):
 
     return data
 
+
+def get_stdin():
+    # buffer = bytearray()
+    # if the json file gets big, you might want to read in 4k chunks
+    # and stop when it hits a closing token
+
+    # READS from stdin
+    # this version, loeds entire small JSON file into memory
+    i = 0
+    start = -1
+    end = -1
+    incre = None
+    decre = None
+    count = 0
+    buffer = []
+    stdin1 = sys.stdin.read(1)
+    while len(stdin1)!=0:
+      ch = stdin1[0]
+      buffer.append(ch)
+      if count!=0:
+        if ch==incre:
+          count+=1
+        elif ch==decre:
+          count-=1
+          if count<=0:
+            end = i
+            # returns JSON object as 
+            # a dictionary
+            data = json.loads( "".join(buffer[start:end+1]) )
+            yield data
+            # break
+            buffer = []
+            start = -1
+            end = -1
+            i = -1
+            decre=None
+            incre=None
+      elif start==-1 and (ch=='{' or ch=='[') :
+        start = i
+        count = 1
+        if ch=='{':
+          incre='{'
+          decre='}'
+        elif ch=='[':
+          incre='['
+          decre=']'
+      elif start==-1 and (ch=='\n' or ch=='\r' or ch=='\t' or ch==' ') :
+        pass # skip whitespace
+      else:
+          raise Exception("Runtime error.  More than 1 start condition for JSON detected")
+      i+=1
+      stdin1 = sys.stdin.read(1)
+
+    if count!=0:
+      sys.stderr.write(buffer)
+      sys.stderr.write("\n")
+      raise Exception("Runtime error.  This might not be a json")
+
+
 def join_pair(block1, block2):
     list2 = list(block2)  # turning iterator into list, for the version that reads several times
     for a in block1:
@@ -83,6 +144,37 @@ def join_pair(block1, block2):
                     if keyA==keyB:
                         yield {"key":keyA, "a": a["value"], "b": b["value"]}
 
+def join_iterator(dict1, generator2):
+    alias = None
+    for b in generator2:
+        keyB = b["key"]
+        if (b["value"]!=None) and (keyB!=None):
+            if keyB in dict1:
+            #for b in list1:   # block2:
+                if debug:
+                    hashed = a["value"]["filename"]+"|"+b["value"]["filename"]
+                    if hashed in compared:
+                        print("already compared")
+                        print(hashed)
+                        raise Exception("Assert failed. ")
+                    compared.add(hashed)
+                a = dict1[keyB]
+                keyA = a["key"]
+                if (b!=None):
+                    valueB = b["value"]
+                    #value["filename"]=="stdin"
+                    #value["json"]["key"]
+                    if ("filename" in valueB) and (valueB["filename"]=="stdin") and ("json" in valueB) and ("key" in valueB["json"]) and (valueB["json"]["key"]==keyA) and ("a" in valueB["json"]) and ("b" in valueB["json"]):
+                        if alias==None:
+                            for ch in list(string.ascii_lowercase[2:]):
+                                if not ch in dict1:
+                                    alias = ch
+                                    break;
+                        copyB = valueB["json"].copy()
+                        copyB[alias] = a["value"]
+                        yield copyB
+                    else:
+                        yield {"key":keyA, "a": a["value"], "b": b["value"]}
 
 def join_jagged(list1, list2):
     i = 0
@@ -135,10 +227,21 @@ def join_jagged(list1, list2):
 
 
 def get_key(s,o):
+    nesting = s.split('.')
+    nestlevels = len(nesting)
+    if nestlevels==1:
+       s = nesting[0]
+    elif nesting[0]=="":   # len(nesting)==0 is impossible, so after prev if, nestlevels>1
+       if nestlevels>2:
+          headkey = nesting[1]
+          tailkey = ".".join(nesting)[1:]
+          return get_key(tailkey,o[headkey])
+       else:  # nestlevels==2
+          s = "." + nesting[1]
     fn = s.split(':')
     joinkeyfield = fn[0]
     start = int(fn[1]) if len(fn)>=2 else 0
-    end = int(fn[2]) if len(fn)>=3 else len(o)
+    end = int(fn[2]) if len(fn)>=3 else None
     # ??? step = int(fn[3]) if len(fn)>=4 else 1
     if joinkeyfield.startswith('filename'):
        return o['filename'][start:end]
@@ -148,7 +251,10 @@ def get_key(s,o):
          # ie. now : 2024/03/31 15:10:
          #           12345678901234567
          #print( o["json"][joinkeyname][start:end] )
-         return o["json"][joinkeyname][start:end]
+         if end==None:
+           return o["json"][joinkeyname][start:]
+         else:
+           return o["json"][joinkeyname][start:end]
        else:
          sys.stderr.write("Cannot find .")
          sys.stderr.write(joinkeyname)
@@ -177,14 +283,17 @@ def get_avg_size(file_list):
 L1 = 16000
 L2 = 128000
 
-if len(sys.argv) < 4:
+if len(sys.argv) < 2:
   print("Usage: jqoin.py [dir1] [key1] [dir2] [key2] ")
+  print("Usage: jqoin.py [dir1] [key1] --key=[key for stdin] ")
   exit(1)
 
+L = len(sys.argv)
 name1 = sys.argv[1]
 key1 = sys.argv[2]
-name2 = sys.argv[3]
-key2 = sys.argv[4]
+name2 = sys.argv[3] if L>4 else None;
+key2 = sys.argv[4]  if L>4 else None;
+stdn_key = sys.argv[3][6:] if L>3 and sys.argv[3][:6]=="--key=" else None;
 
 #print(datetime.now(),name1,key1,name2,key2)
 
@@ -204,25 +313,29 @@ else:
     full1  = glob.glob(name1)
     files1 = list(map(lambda s: os.path.basename(s), full1))
 
-
-dir2 = name2 if os.path.isdir(name2) else os.path.dirname(name2)
-pattern2 = None if name2==dir2 else os.path.basename(name2)
-pass2 = os.path.isdir(dir2)
+dir2 = None
+pattern2 = None
+pass2 = None
 files2 = None
-if debug:
-    sys.stderr.write(datetime.now(),pattern2,dir2,pass2)
-    sys.stderr.write("\n")
-if pattern2==None:
-    #print("list "+ dir2)
-    files2 = os.listdir(dir2)
-    full2 = list(map(lambda s: dir2 + "/" + s, files2))
-else:
-    #print("search" + name2)
-    full2  = glob.glob(name2)
-    files2 = list(map(lambda s: os.path.basename(s), full2))
-if debug:
-    sys.stderr.write(datetime.now())
-    sys.stderr.write("\n")
+if L==5:
+    dir2 = name2 if os.path.isdir(name2) else os.path.dirname(name2)
+    pattern2 = None if name2==dir2 else os.path.basename(name2)
+    pass2 = os.path.isdir(dir2)
+    files2 = None
+    if debug:
+        sys.stderr.write(datetime.now(),pattern2,dir2,pass2)
+        sys.stderr.write("\n")
+    if pattern2==None:
+        #print("list "+ dir2)
+        files2 = os.listdir(dir2)
+        full2 = list(map(lambda s: dir2 + "/" + s, files2))
+    else:
+        #print("search" + name2)
+        full2  = glob.glob(name2)
+        files2 = list(map(lambda s: os.path.basename(s), full2))
+    if debug:
+        sys.stderr.write(datetime.now())
+        sys.stderr.write("\n")
 
 # there is no way to tell if there is no duplicate keys w/o loading all the files
 #dupe1 = len(set(map(lambda s:key1,files1))) == len(files1)
@@ -277,12 +390,43 @@ if key1.startswith("filename") and key2.startswith("filename"):
                 item["a"]["json"] = itemA
                 item["b"]["json"] = itemB
                 print( json.dumps(item) )
+                sys.stdout.flush() 
         #for item in join_jagged(list1, list2):
         #    print( json.dumps(item) )
 
         # sys.stderr.write("File index join Not finished yet")
         # sys.stderr.write("\n")
         exit(0)
+
+# this branch loads the files into memory, processes joins
+is_pipe = not isatty(sys.stdin.fileno())
+if is_pipe:
+    if debug:
+        sys.stderr.write("sorting " + name1)
+    value1 = map(lambda s: {"filename":s, "json":get_json(s)}, full1)
+    keys1 = map(lambda s: {"key": get_key(key1,s), "value":s}, value1)
+    filtered1 = filter(lambda s: s["key"]!=None, keys1)
+    #list1 = list(filtered1)
+    #list1.sort(key=lambda s:s["key"])
+    dict1 = dict(map(lambda s:(s["key"],s), filtered1))
+
+    if debug:
+        sys.stderr.write("sorting " + name2)
+    key = ".key" if stdn_key==None else stdn_key
+    value2 = map(lambda s: {"filename":"stdin", "json":s}, get_stdin())
+    keys2 = map(lambda s: {"key": get_key(key,s), "value":s}, value2)
+    filtered2 = filter(lambda s: s["key"]!=None, keys2)
+    # list2.sort(key=lambda s:s["key"])
+    gen2 = filtered2
+
+    if debug:
+        sys.stderr.write("joining")
+
+    for item in join_iterator(dict1, gen2):
+        print( json.dumps(item) )
+        sys.stdout.flush() 
+
+    exit(0)
 
 # this branch loads every json into memory and hopes it doesnt crash
 if True:
@@ -307,6 +451,7 @@ if True:
 
     for item in join_jagged(list1, list2):
         print( json.dumps(item) )
+        sys.stdout.flush() 
 
     exit(0)
 
@@ -321,3 +466,4 @@ if True:
 # ...
 
 exit(1)
+

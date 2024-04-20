@@ -118,6 +118,54 @@ jqoin.py 'path1/' filename:3:7 'path2/' filename:7:11
 ((.[]|select(.mm=="12"))//({ "mm": "12", "data": [null,null,null,null,null,null,null,null,null,null,null,null] }))
 ]' 
 
+How to do multi "table" joins
+===============================
+./jqoin.py 'a/' .now:0:16 'b/' .now:0:16 2>/dev/null | ./jqoin.py 'a/' .now:0:16 2>/dev/null | jq .
+
+the first is "a" and second is "b".  It will recognize if stdin is from join, and assign a "c".  when stdin is involved, it will only recognize the first 2 arguments, to join another list
+
+{
+  "key": "2023/10/01 13:28",
+  "a": {
+    "filename": "a//132803.json",
+    "json": {
+      "function": "READ",
+      "current": 8.4,
+      "voltage": 13.5,
+      "remaining_charge": 25.2,
+      "capacity": 50,
+      "now": "2023/10/01 13:28:31"
+    }
+  },
+  "b": {
+    "filename": "b//132803.json",
+    "json": {
+      "payload": {
+        "battery_charging_current": 10.2,
+        "battery_voltage": 13.83,
+        "charge_state": "bulk",
+        "external_device_load": 0,
+        "solar_power": 44,
+        "yield_today": 50
+      },
+      "now": "2023/10/01 13:28:22"
+    }
+  },
+  "c": {
+    "filename": "a//132803.json",
+    "json": {
+      "function": "READ",
+      "current": 8.4,
+      "voltage": 13.5,
+      "remaining_charge": 25.2,
+      "capacity": 50,
+      "now": "2023/10/01 13:28:31"
+    }
+  }
+}
+
+
+
 <Finished!>
 
 This might help in creating a job to create json, for the Solar meter
