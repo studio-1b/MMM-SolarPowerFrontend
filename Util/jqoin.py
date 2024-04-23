@@ -302,7 +302,7 @@ pattern1 = None if name1==dir1 else os.path.basename(name1)
 pass1 = os.path.isdir(dir1)
 files1 = None
 if debug:
-    sys.stderr.write(datetime.now(),pattern1,dir1,pass1)
+    sys.stderr.write(datetime.now()+pattern1+dir1+pass1)
     sys.stderr.write("\n")
 if pattern1==None:
     #print("list "+dir1)
@@ -323,7 +323,7 @@ if L==5:
     pass2 = os.path.isdir(dir2)
     files2 = None
     if debug:
-        sys.stderr.write(datetime.now(),pattern2,dir2,pass2)
+        sys.stderr.write(datetime.now()+pattern2+dir2+pass2)
         sys.stderr.write("\n")
     if pattern2==None:
         #print("list "+ dir2)
@@ -341,7 +341,7 @@ if L==5:
 #dupe1 = len(set(map(lambda s:key1,files1))) == len(files1)
 #dupe2 = len(set(map(lambda s:key2,files2))) == len(files2)
 # except if they keys is part of filename (why database index helps)
-if key1.startswith("filename") and key2.startswith("filename"):
+if key1.startswith("filename") and key2!=None and key2.startswith("filename"):
     #set1 = set(map(lambda s:get_filekey(s,key1),files1))
     #set2 = set(map(lambda s:get_filekey(s,key2),files2))
     #unique1 = len(set1) == len(files1)
@@ -381,16 +381,20 @@ if key1.startswith("filename") and key2.startswith("filename"):
         lst = list(filtered)
         lst.sort(key=lambda s:s["key"])
 
-        for item in lst:
-            fileA = item["a"]["json"];
-            fileB = item["b"]["json"];
-            itemA = get_json(fileA)
-            itemB = get_json(fileB)
-            if itemA!=None and itemB!=None:
-                item["a"]["json"] = itemA
-                item["b"]["json"] = itemB
-                print( json.dumps(item) )
-                sys.stdout.flush() 
+        try:
+            for item in lst:
+                fileA = item["a"]["json"];
+                fileB = item["b"]["json"];
+                itemA = get_json(fileA)
+                itemB = get_json(fileB)
+                if itemA!=None and itemB!=None:
+                    item["a"]["json"] = itemA
+                    item["b"]["json"] = itemB
+                    print( json.dumps(item) )
+                    sys.stdout.flush() 
+        except KeyboardInterrupt:
+            pass
+
         #for item in join_jagged(list1, list2):
         #    print( json.dumps(item) )
 
@@ -403,7 +407,7 @@ is_pipe = not isatty(sys.stdin.fileno())
 if is_pipe:
     if debug:
         sys.stderr.write("sorting " + name1)
-    value1 = map(lambda s: {"filename":s, "json":get_json(s)}, full1)
+    value1 = map(lambda s: {"filename":os.path.basename(s), "json":get_json(s)}, full1)
     keys1 = map(lambda s: {"key": get_key(key1,s), "value":s}, value1)
     filtered1 = filter(lambda s: s["key"]!=None, keys1)
     #list1 = list(filtered1)
@@ -422,9 +426,12 @@ if is_pipe:
     if debug:
         sys.stderr.write("joining")
 
-    for item in join_iterator(dict1, gen2):
-        print( json.dumps(item) )
-        sys.stdout.flush() 
+    try:
+        for item in join_iterator(dict1, gen2):
+            print( json.dumps(item) )
+            sys.stdout.flush() 
+    except KeyboardInterrupt:
+        pass
 
     exit(0)
 
@@ -449,9 +456,12 @@ if True:
     if debug:
         sys.stderr.write("joining")
 
-    for item in join_jagged(list1, list2):
-        print( json.dumps(item) )
-        sys.stdout.flush() 
+    try:
+        for item in join_jagged(list1, list2):
+            print( json.dumps(item) )
+            sys.stdout.flush() 
+    except KeyboardInterrupt:
+        pass
 
     exit(0)
 
@@ -466,4 +476,3 @@ if True:
 # ...
 
 exit(1)
-
